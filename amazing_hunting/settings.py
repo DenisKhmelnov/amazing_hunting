@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-import authentication.models
+# import authentication.models
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
