@@ -13,7 +13,6 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# import authentication.models
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,7 +39,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'vacancies',
     'companies',
-    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -136,5 +134,3 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10
 }
-
-AUTH_USER_MODEL = "authentication.User"
