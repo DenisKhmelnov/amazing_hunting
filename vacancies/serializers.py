@@ -1,6 +1,17 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from vacancies.models import Vacancy, Skill
+
+
+class NotInStatusValidator:
+
+    def __init__(self, statuses):
+        self.statuses = statuses
+
+    def __call__(self, value):
+        if value not in self.statuses:
+            raise serializers.ValidationError("Incorrect status")
 
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -43,12 +54,17 @@ class VacancyCreateSerializer(serializers.ModelSerializer):
         slug_field="name"
     )
 
+    slug = serializers.CharField(
+        max_length=50,
+        serializers=[UniqueValidator(queryset=Vacancy.objects.all())]
+    )
+
     class Meta:
         model = Vacancy
         fields = "__all__"
 
     def is_valid(self, raise_exception=False):
-        self._skills = self.initial_data.pop("skills")
+        self._skills = self.initial_data.pop("skills", [])
         super().is_valid(raise_exception=raise_exception)
 
     def create(self, validated_data):
@@ -77,7 +93,7 @@ class VacancyUpdateSerializer(serializers.ModelSerializer):
         fields = ["id", "text", "status", "slug", "user", "created", "skills"]
 
     def is_valid(self, raise_exception=False):
-        self._skills = self.initial_data.pop("skills")
+        self._skills = self.initial_data.pop("skills", [])
         super().is_valid(raise_exception=raise_exception)
 
     def save(self):

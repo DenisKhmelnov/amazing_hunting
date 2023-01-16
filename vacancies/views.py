@@ -4,10 +4,12 @@ from django.db.models import Count, Avg, Q, F
 from django.http import HttpResponse, JsonResponse
 from django.views import View
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from amazing_hunting import settings
 from vacancies.models import Vacancy, Skill
+from vacancies.permissions import VacancyCreatePermission
 from vacancies.serializers import VacancyListSerializer, VacancyDetailSerializer, VacancyCreateSerializer, \
     VacancyUpdateSerializer, VacancyDestroySerializer, SkillSerializer
 
@@ -47,11 +49,13 @@ class VacancyListView(ListAPIView):
 class VacancyDetailView(RetrieveAPIView):
     queryset = Vacancy.objects.all()
     serializer_class = VacancyDetailSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class VacancyCreateView(CreateAPIView):
     queryset = Vacancy.objects.all()
     serializer_class = VacancyCreateSerializer
+    permission_classes = [IsAuthenticated, VacancyCreatePermission]
 
 
 class VacancyUpdateView(UpdateAPIView):
